@@ -1,6 +1,8 @@
+'use strict'
+
 const router = require('express').Router();
 const commitRouter = require('./commit');
-const context = require('../data');
+const context = require('../models/index')();
 
 router.get('/', async (req, res, next) => {
     try {
@@ -78,12 +80,14 @@ router.delete('/:id', async (req, res, next) => {
     try {
         req.ability.throwUnlessCan('delete', 'Repo');
 
+        const repo = await context.repos.findById(req.params.id);
+        repo.get
         await context.repos.destroy({
             where: {
                 id: req.params.id
             }
         });
-
+        
         res.sendStatus(200);
     } catch (error) {
         next(error);

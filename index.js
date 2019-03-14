@@ -1,26 +1,22 @@
-const http = require('http');
+'use strict'
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const morgan = require('morgan');
 const { Ability, AbilityBuilder, ForbiddenError } = require('casl');
 
-const context = require('./data');
-const insertData = require('./data/insert-data');
-const apiRouter = require('./routes');
+const context = require('./models/index')();
+const insertData = require('./models/test-data');
+const apiRouter = require('./routes/index');
 
 insertData(context);
 
-const app = express(http);
-
-app.use(morgan('dev'));
+const app = express();
 
 app.use(bodyParser.json({ type: 'application/json' }));
 
 app.use('/api', (req, res, next) => {
     const { rules, can, cannot } = AbilityBuilder.extract();
     const role = req.query.role || 'guest';
-
-    console.log(`Current role = ${role}`);
 
     if (role === 'guest') {
         can('read', 'all');
@@ -44,7 +40,7 @@ app.use('/api', (req, res, next) => {
     next();
 });
 
-app.use('/api/', apiRouter);
+app.use('/api/v1/', apiRouter);
 
 app.use((error, req, res, next) => {
     if (error instanceof ForbiddenError) {
@@ -54,4 +50,6 @@ app.use((error, req, res, next) => {
     }
 });
 
-app.listen(3000);
+app.listen(3000, function () {
+    console.log("Server is running...");
+});

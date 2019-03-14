@@ -1,5 +1,7 @@
+'use strict'
+
 const router = require('express').Router();
-const context = require('../data');
+const context = require('../models/index')();
 
 router.get('/', async (req, res, next) => {
     try {
@@ -91,7 +93,7 @@ router.delete('/:id', async (req, res, next) => {
                 id: req.params.id
             }
         });
-
+        
         res.sendStatus(200);
     } catch (error) {
         next(error);

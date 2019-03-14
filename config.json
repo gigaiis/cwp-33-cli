@@ -1,8 +1,9 @@
 {
-  "db": {
-    "host": "127.0.0.1",
-    "name": "cwp32",
-    "user": "root",
-    "password": "11111"
-  }
+    "db": {
+        "host": "localhost",
+        "dialect": "mysql",
+        "name": "cwp_32",
+        "user": "root",
+        "password": "root"
+    }
 }
